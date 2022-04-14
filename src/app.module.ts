@@ -6,10 +6,18 @@ import { PostsService } from './posts/posts.service';
 import { PostsModule } from './posts/posts.module';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Post } from './posts/posts.model';
+import { ConfigModule } from '@nestjs/config';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import * as path from 'path';
 
 @Module({
   imports: [
-    PostsModule,
+    ConfigModule.forRoot({
+      envFilePath: `.env.${process.env.NODE_ENV}`,
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: path.resolve(__dirname, 'static'),
+    }),
     SequelizeModule.forRoot({
       dialect: 'postgres',
       host: process.env.POSTGRES_HOST,
@@ -20,13 +28,8 @@ import { Post } from './posts/posts.model';
       models: [Post],
       autoLoadModels: true,
       synchronize: true,
-      dialectOptions: {
-        ssl: {
-          require: true,
-          rejectUnauthorized: false,
-        },
-      },
     }),
+    PostsModule,
   ],
   controllers: [AppController, PostsController],
   providers: [AppService, PostsService],
