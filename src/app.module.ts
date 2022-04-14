@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
-import { PostsModule } from './posts/users.module';
+import { UsersModule } from './users/users.module';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { User } from './posts/users.model';
+import { User } from './users/users.model';
 import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { AuthModule } from './auth/auth.module';
 import * as path from 'path';
 
 @Module({
@@ -27,7 +28,8 @@ import * as path from 'path';
       autoLoadModels: true,
       synchronize: true,
     }),
-    PostsModule,
+    UsersModule,
+    AuthModule,
   ],
 })
 export class AppModule {}

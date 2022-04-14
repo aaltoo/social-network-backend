@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './users.model';
-
+import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UsersService {
   constructor(@InjectModel(User) private userRepository: typeof User) {}
@@ -13,15 +13,28 @@ export class UsersService {
 
   async createUser(dto: CreateUserDto) {
     try {
-      const item = await this.userRepository.create({
+      const saltRounds = 10;
+      const hash = await bcrypt.hash(dto.password, saltRounds);
+      await this.userRepository.create({
         ...dto,
+        password: hash,
       });
-      const createdItem = await this.userRepository.findByPk(item.id, {
-        include: { all: true },
+      const user = await this.userRepository.findOne({
+        where: { username: dto.username },
       });
-      return createdItem;
+      return user;
     } catch (err) {
-      return err;
+      throw new Error(err);
+    }
+  }
+
+  async getUserByUsername(username) {
+    try {
+      return await this.userRepository.findOne({
+        where: { username: username },
+      });
+    } catch (err) {
+      throw new Error(err);
     }
   }
 

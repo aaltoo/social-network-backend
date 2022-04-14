@@ -1,12 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
-interface SizeCreationAttrs {
-  text: string;
+interface UserCreationAttrs {
+  email: string;
+  password: string;
+  username: string;
 }
 
 @Table({ tableName: 'users' })
-export class User extends Model<User, SizeCreationAttrs> {
+export class User extends Model<User, UserCreationAttrs> {
   @ApiProperty({ example: 1, description: 'Уникальный идентификатор' })
   @Column({
     type: DataType.INTEGER,
@@ -20,8 +22,12 @@ export class User extends Model<User, SizeCreationAttrs> {
   @Column({ type: DataType.STRING, allowNull: false })
   email: string;
 
-  @ApiProperty({ example: 'jwt.token.here', description: 'jwt token' })
+  @ApiProperty({ example: 'some password', description: 'encrypted password' })
   @Column({ type: DataType.STRING, allowNull: false })
+  password: string;
+
+  @ApiProperty({ example: 'jwt.token.here', description: 'jwt token' })
+  @Column({ type: DataType.STRING })
   token: string;
 
   @ApiProperty({ example: 'jake', description: 'username' })
