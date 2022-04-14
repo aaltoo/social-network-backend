@@ -7,7 +7,7 @@ interface SizeCreationAttrs {
 }
 
 @Table({ tableName: 'posts' })
-export class Size extends Model<Size, SizeCreationAttrs> {
+export class Post extends Model<Post, SizeCreationAttrs> {
   @ApiProperty({ example: 1, description: 'Уникальный идентификатор' })
   @Column({
     type: DataType.INTEGER,
@@ -17,7 +17,7 @@ export class Size extends Model<Size, SizeCreationAttrs> {
   })
   id: number;
 
-  @ApiProperty({ example: 'S', description: 'Размер' })
+  @ApiProperty({ example: 'S', description: 'Текст' })
   @Column({ type: DataType.STRING, allowNull: false })
-  title: string;
+  text: string;
 }
