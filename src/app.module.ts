@@ -1,16 +1,14 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { PostsController } from './posts/posts.controller';
-import { PostsService } from './posts/posts.service';
-import { PostsModule } from './posts/posts.module';
+import { PostsModule } from './posts/users.module';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { Post } from './posts/posts.model';
+import { User } from './posts/users.model';
 import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import * as path from 'path';
 
 @Module({
+  controllers: [],
+  providers: [],
   imports: [
     ConfigModule.forRoot({
       envFilePath: `.env.${process.env.NODE_ENV}`,
@@ -25,13 +23,11 @@ import * as path from 'path';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [Post],
+      models: [User],
       autoLoadModels: true,
       synchronize: true,
     }),
     PostsModule,
   ],
-  controllers: [AppController, PostsController],
-  providers: [AppService, PostsService],
 })
 export class AppModule {}
